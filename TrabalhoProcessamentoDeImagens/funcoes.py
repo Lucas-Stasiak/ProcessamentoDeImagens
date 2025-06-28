@@ -1504,3 +1504,409 @@ def aplicar_filtro_gaussiano():
     except Exception as e:
         print(f"Erro ao aplicar filtro Gaussiano: {e}")
         resetarEntradas()
+
+
+
+def aplicar_filtro_prewitt():
+    try:
+        # Lê a imagem
+        imgA = cv2.imread("imagemA.png", cv2.IMREAD_UNCHANGED)
+
+        # Define os kernels de Prewitt
+        kernel_x = np.array([[ -1, 0, 1],
+                             [ -1, 0, 1],
+                             [ -1, 0, 1]], dtype=np.float32)
+
+        kernel_y = np.array([[ 1,  1,  1],
+                             [ 0,  0,  0],
+                             [-1, -1, -1]], dtype=np.float32)
+
+        raio = 1  # já que o kernel é 3x3
+
+        # Aplica o filtro Prewitt
+        if len(imgA.shape) == 2:
+            altura, largura = imgA.shape
+            img_result = np.zeros_like(imgA, dtype=np.uint8)
+            for y in range(raio, altura - raio):
+                for x in range(raio, largura - raio):
+                    gx = 0.0
+                    gy = 0.0
+                    for ky in range(-raio, raio + 1):
+                        for kx in range(-raio, raio + 1):
+                            pixel = imgA[y + ky, x + kx]
+                            gx += pixel * kernel_x[ky + raio, kx + raio]
+                            gy += pixel * kernel_y[ky + raio, kx + raio]
+                    magnitude = np.sqrt(gx**2 + gy**2)
+                    img_result[y, x] = np.clip(magnitude, 0, 255)
+        else:
+            altura, largura, canais = imgA.shape
+            img_result = np.zeros_like(imgA, dtype=np.uint8)
+            for y in range(raio, altura - raio):
+                for x in range(raio, largura - raio):
+                    for c in range(canais):
+                        gx = 0.0
+                        gy = 0.0
+                        for ky in range(-raio, raio + 1):
+                            for kx in range(-raio, raio + 1):
+                                pixel = imgA[y + ky, x + kx, c]
+                                gx += pixel * kernel_x[ky + raio, kx + raio]
+                                gy += pixel * kernel_y[ky + raio, kx + raio]
+                        magnitude = np.sqrt(gx**2 + gy**2)
+                        img_result[y, x, c] = np.clip(magnitude, 0, 255)
+
+        # Salva e exibe a imagem resultante
+        cv2.imwrite("img_result_prewitt.png", img_result)
+
+        img_result_pil = Image.open("img_result_prewitt.png")
+        img_result_pil = img_result_pil.resize((350, 350), Image.Resampling.LANCZOS)
+        img_result_tk = ImageTk.PhotoImage(img_result_pil)
+
+        label_imagem_result.config(image=img_result_tk)
+        label_imagem_result.image = img_result_tk
+        label_imagem_result.place(x=1500, y=30)
+    except Exception as e:
+        print(f"Erro ao aplicar filtro Prewitt: {e}")
+
+
+
+def aplicar_filtro_sobel():
+    try:
+        # Lê a imagem
+        imgA = cv2.imread("imagemA.png", cv2.IMREAD_UNCHANGED)
+
+        # Define os kernels de Sobel
+        kernel_x = np.array([[ -1, 0, 1],
+                             [ -2, 0, 2],
+                             [ -1, 0, 1]], dtype=np.float32)
+
+        kernel_y = np.array([[ 1,  2,  1],
+                             [ 0,  0,  0],
+                             [-1, -2, -1]], dtype=np.float32)
+
+        raio = 1  # kernel 3x3
+
+        # Aplica o filtro de Sobel
+        if len(imgA.shape) == 2:
+            altura, largura = imgA.shape
+            img_result = np.zeros_like(imgA, dtype=np.uint8)
+            for y in range(raio, altura - raio):
+                for x in range(raio, largura - raio):
+                    gx = 0.0
+                    gy = 0.0
+                    for ky in range(-raio, raio + 1):
+                        for kx in range(-raio, raio + 1):
+                            pixel = imgA[y + ky, x + kx]
+                            gx += pixel * kernel_x[ky + raio, kx + raio]
+                            gy += pixel * kernel_y[ky + raio, kx + raio]
+                    magnitude = np.sqrt(gx**2 + gy**2)
+                    img_result[y, x] = np.clip(magnitude, 0, 255)
+        else:
+            altura, largura, canais = imgA.shape
+            img_result = np.zeros_like(imgA, dtype=np.uint8)
+            for y in range(raio, altura - raio):
+                for x in range(raio, largura - raio):
+                    for c in range(canais):
+                        gx = 0.0
+                        gy = 0.0
+                        for ky in range(-raio, raio + 1):
+                            for kx in range(-raio, raio + 1):
+                                pixel = imgA[y + ky, x + kx, c]
+                                gx += pixel * kernel_x[ky + raio, kx + raio]
+                                gy += pixel * kernel_y[ky + raio, kx + raio]
+                        magnitude = np.sqrt(gx**2 + gy**2)
+                        img_result[y, x, c] = np.clip(magnitude, 0, 255)
+
+        # Salva e exibe a imagem resultante
+        cv2.imwrite("img_result_sobel.png", img_result)
+
+        img_result_pil = Image.open("img_result_sobel.png")
+        img_result_pil = img_result_pil.resize((350, 350), Image.Resampling.LANCZOS)
+        img_result_tk = ImageTk.PhotoImage(img_result_pil)
+
+        label_imagem_result.config(image=img_result_tk)
+        label_imagem_result.image = img_result_tk
+        label_imagem_result.place(x=1500, y=30)
+    except Exception as e:
+        print(f"Erro ao aplicar filtro Sobel: {e}")
+
+
+
+
+def aplicar_filtro_laplaciano():
+    try:
+        # Lê a imagem
+        imgA = cv2.imread("imagemA.png", cv2.IMREAD_UNCHANGED)
+
+        # Define o kernel Laplaciano 3x3
+        kernel = np.array([[ 0, -1,  0],
+                           [-1,  4, -1],
+                           [ 0, -1,  0]], dtype=np.float32)
+
+        raio = 1  # Kernel 3x3 → raio = 1
+
+        # Aplica o filtro Laplaciano
+        if len(imgA.shape) == 2:
+            altura, largura = imgA.shape
+            img_result = np.zeros_like(imgA, dtype=np.uint8)
+            for y in range(raio, altura - raio):
+                for x in range(raio, largura - raio):
+                    valor = 0.0
+                    for ky in range(-raio, raio + 1):
+                        for kx in range(-raio, raio + 1):
+                            pixel = imgA[y + ky, x + kx]
+                            valor += pixel * kernel[ky + raio, kx + raio]
+                    img_result[y, x] = np.clip(valor, 0, 255)
+        else:
+            altura, largura, canais = imgA.shape
+            img_result = np.zeros_like(imgA, dtype=np.uint8)
+            for y in range(raio, altura - raio):
+                for x in range(raio, largura - raio):
+                    for c in range(canais):
+                        valor = 0.0
+                        for ky in range(-raio, raio + 1):
+                            for kx in range(-raio, raio + 1):
+                                pixel = imgA[y + ky, x + kx, c]
+                                valor += pixel * kernel[ky + raio, kx + raio]
+                        img_result[y, x, c] = np.clip(valor, 0, 255)
+
+        # Salva e exibe a imagem resultante
+        cv2.imwrite("img_result_laplaciano.png", img_result)
+
+        img_result_pil = Image.open("img_result_laplaciano.png")
+        img_result_pil = img_result_pil.resize((350, 350), Image.Resampling.LANCZOS)
+        img_result_tk = ImageTk.PhotoImage(img_result_pil)
+
+        label_imagem_result.config(image=img_result_tk)
+        label_imagem_result.image = img_result_tk
+        label_imagem_result.place(x=1500, y=30)
+    except Exception as e:
+        print(f"Erro ao aplicar filtro Laplaciano: {e}")
+
+
+def aplicar_dilatacao():
+    try:
+        # Lê a imagem
+        imgA = cv2.imread("imagemA.png", cv2.IMREAD_UNCHANGED)
+
+        # Converte para escala de cinza se necessário
+        if len(imgA.shape) == 3:
+            imgA = cv2.cvtColor(imgA, cv2.COLOR_BGR2GRAY)
+
+
+        _, img_bin = cv2.threshold(imgA, 127, 255, cv2.THRESH_BINARY)
+
+        altura, largura = img_bin.shape
+        img_result = np.zeros_like(img_bin, dtype=np.uint8)
+
+
+        kernel = np.ones((5, 5), dtype=np.uint8)
+        raio = 1  # kernel 3x3
+
+        for y in range(raio, altura - raio):
+            for x in range(raio, largura - raio):
+                max_val = 0
+                for ky in range(-raio, raio + 1):
+                    for kx in range(-raio, raio + 1):
+                        if kernel[ky + raio, kx + raio] == 1:
+                            val = img_bin[y + ky, x + kx]
+                            if val > max_val:
+                                max_val = val
+                img_result[y, x] = max_val
+
+        # Salva e exibe a imagem resultante
+        cv2.imwrite("img_result_dilatacao_manual.png", img_result)
+
+        img_result_pil = Image.open("img_result_dilatacao_manual.png")
+        img_result_pil = img_result_pil.resize((350, 350), Image.Resampling.LANCZOS)
+        img_result_tk = ImageTk.PhotoImage(img_result_pil)
+
+        label_imagem_result.config(image=img_result_tk)
+        label_imagem_result.image = img_result_tk
+        label_imagem_result.place(x=1500, y=30)
+    except Exception as e:
+        print(f"Erro ao aplicar dilatação manual: {e}")
+
+
+def aplicar_erosao():
+    try:
+        # Lê a imagem
+        imgA = cv2.imread("imagemA.png", cv2.IMREAD_UNCHANGED)
+
+        # Converte para escala de cinza se necessário
+        if len(imgA.shape) == 3:
+            imgA = cv2.cvtColor(imgA, cv2.COLOR_BGR2GRAY)
+
+        # Binariza a imagem (ajuste o limiar conforme necessário)
+        _, img_bin = cv2.threshold(imgA, 127, 255, cv2.THRESH_BINARY)
+
+        altura, largura = img_bin.shape
+        img_result = np.zeros_like(img_bin, dtype=np.uint8)
+
+
+        kernel = np.ones((5, 5), dtype=np.uint8)
+        raio = 1  # kernel 3x3
+
+        for y in range(raio, altura - raio):
+            for x in range(raio, largura - raio):
+                manter_pixel = True
+                for ky in range(-raio, raio + 1):
+                    for kx in range(-raio, raio + 1):
+                        if kernel[ky + raio, kx + raio] == 1:
+                            if img_bin[y + ky, x + kx] != 255:
+                                manter_pixel = False
+                                break
+                    if not manter_pixel:
+                        break
+                img_result[y, x] = 255 if manter_pixel else 0
+
+        # Salva e exibe a imagem resultante
+        cv2.imwrite("img_result_erosao_manual.png", img_result)
+
+        img_result_pil = Image.open("img_result_erosao_manual.png")
+        img_result_pil = img_result_pil.resize((350, 350), Image.Resampling.LANCZOS)
+        img_result_tk = ImageTk.PhotoImage(img_result_pil)
+
+        label_imagem_result.config(image=img_result_tk)
+        label_imagem_result.image = img_result_tk
+        label_imagem_result.place(x=1500, y=30)
+    except Exception as e:
+        print(f"Erro ao aplicar erosão manual: {e}")
+
+
+def erosao_manual(img_bin):
+    altura, largura = img_bin.shape
+    img_erosao = np.zeros_like(img_bin, dtype=np.uint8)
+    kernel = np.ones((3, 3), dtype=np.uint8)
+    raio = 1
+
+    for y in range(raio, altura - raio):
+        for x in range(raio, largura - raio):
+            manter_pixel = True
+            for ky in range(-raio, raio + 1):
+                for kx in range(-raio, raio + 1):
+                    if kernel[ky + raio, kx + raio] == 1:
+                        if img_bin[y + ky, x + kx] != 255:
+                            manter_pixel = False
+                            break
+                if not manter_pixel:
+                    break
+            img_erosao[y, x] = 255 if manter_pixel else 0
+    return img_erosao
+
+
+def dilatacao_manual(img_bin):
+    altura, largura = img_bin.shape
+    img_dilatacao = np.zeros_like(img_bin, dtype=np.uint8)
+    kernel = np.ones((3, 3), dtype=np.uint8)
+    raio = 1
+
+    for y in range(raio, altura - raio):
+        for x in range(raio, largura - raio):
+            max_val = 0
+            for ky in range(-raio, raio + 1):
+                for kx in range(-raio, raio + 1):
+                    if kernel[ky + raio, kx + raio] == 1:
+                        val = img_bin[y + ky, x + kx]
+                        if val > max_val:
+                            max_val = val
+            img_dilatacao[y, x] = max_val
+    return img_dilatacao
+
+
+def aplicar_abertura():
+    try:
+        # Lê a imagem
+        imgA = cv2.imread("imagemA.png", cv2.IMREAD_UNCHANGED)
+
+        # Converte para escala de cinza se necessário
+        if len(imgA.shape) == 3:
+            imgA = cv2.cvtColor(imgA, cv2.COLOR_BGR2GRAY)
+
+        _, img_bin = cv2.threshold(imgA, 127, 255, cv2.THRESH_BINARY)
+
+        # Aplica erosão e depois dilatação
+        img_erosao = erosao_manual(img_bin)
+        img_result = dilatacao_manual(img_erosao)
+
+        # Salva e exibe o resultado
+        cv2.imwrite("img_result_abertura.png", img_result)
+
+        img_result_pil = Image.open("img_result_abertura.png")
+        img_result_pil = img_result_pil.resize((350, 350), Image.Resampling.LANCZOS)
+        img_result_tk = ImageTk.PhotoImage(img_result_pil)
+
+        label_imagem_result.config(image=img_result_tk)
+        label_imagem_result.image = img_result_tk
+        label_imagem_result.place(x=1500, y=30)
+
+    except Exception as e:
+        print(f"Erro ao aplicar abertura: {e}")
+
+
+
+def aplicar_fechamento():
+    try:
+        # Lê a imagem
+        imgA = cv2.imread("imagemA.png", cv2.IMREAD_UNCHANGED)
+
+        # Converte para cinza se necessário
+        if len(imgA.shape) == 3:
+            imgA = cv2.cvtColor(imgA, cv2.COLOR_BGR2GRAY)
+
+        _, img_bin = cv2.threshold(imgA, 127, 255, cv2.THRESH_BINARY)
+
+        # Aplica dilatação e depois erosão
+        img_dilatada = dilatacao_manual(img_bin)
+        img_result = erosao_manual(img_dilatada)
+
+        # Salva e exibe
+        cv2.imwrite("img_result_fechamento.png", img_result)
+        img_result_pil = Image.open("img_result_fechamento.png")
+        img_result_pil = img_result_pil.resize((350, 350), Image.Resampling.LANCZOS)
+        img_result_tk = ImageTk.PhotoImage(img_result_pil)
+
+        label_imagem_result.config(image=img_result_tk)
+        label_imagem_result.image = img_result_tk
+        label_imagem_result.place(x=1500, y=30)
+
+    except Exception as e:
+        print(f"Erro ao aplicar fechamento: {e}")
+
+def contorno_manual(img):
+    # Aplica dilatação e erosão com as funções manuais
+    img_dilatada = dilatacao_manual(img)
+    img_erosionada = erosao_manual(img)
+
+    # Inicializa imagem de saída
+    altura, largura = img.shape
+    img_resultado = np.zeros((altura, largura), dtype=np.uint8)
+
+    # subtrair pixel a pixel
+    for i in range(altura):
+        for j in range(largura):
+            valor = int(img_dilatada[i, j]) - int(img_erosionada[i, j])
+            # Garante que não fique negativo
+            img_resultado[i, j] = max(0, valor)
+
+    return img_resultado
+
+
+def aplicar_contorno():
+    try:
+        imgA = cv2.imread("imagemA.png", cv2.IMREAD_GRAYSCALE)
+        _, img_bin = cv2.threshold(imgA, 127, 255, cv2.THRESH_BINARY)
+
+        img_result = contorno_manual(img_bin)
+
+        cv2.imwrite("img_result_contorno_manual.png", img_result)
+
+        img_result_pil = Image.open("img_result_contorno_manual.png")
+        img_result_pil = img_result_pil.resize((350, 350), Image.Resampling.LANCZOS)
+        img_result_tk = ImageTk.PhotoImage(img_result_pil)
+
+        label_imagem_result.config(image=img_result_tk)
+        label_imagem_result.image = img_result_tk
+        label_imagem_result.place(x=1500, y=30)
+
+    except Exception as e:
+        print(f"Erro ao aplicar contorno manual: {e}")

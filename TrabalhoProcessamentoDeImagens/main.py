@@ -30,6 +30,10 @@ label_Operacoes_logicas = Label(Janela, text="Operações Lógicas", font=("Aria
 label_Operacoes_logicas.place(x=1000, y=10)
 label_Realce_Imagens = Label(Janela, text="Realce de Imagem", font=("Arial", 10), fg="black")
 label_Realce_Imagens.place(x = 1200, y = 10)
+label_Realce_Bordas = Label(Janela, text="Realce de Bordas", font=("Arial", 10), fg="black")
+label_Realce_Bordas.place(x = 1330, y = 10)
+label_Operacoes_morfologicas = Label(Janela, text="Operações Morfológicas", font=("Arial", 10), fg="black")
+label_Operacoes_morfologicas.place(x = 1330, y = 270)
 
 funcoes.configurar_label(label_imagem_result)
 funcoes.configurar_labelImgA(label_imagemA)
@@ -79,7 +83,7 @@ def selecionar_imagem_A():
 def selecionar_imagem_B():
     caminho_imagem = filedialog.askopenfilename(
         title="Selecione uma imagem",
-        filetypes=[("Imagens", "*.png;*.jpg;*.jpeg;*.bmp;*.gif")]
+        filetypes=[("Imagens", "*.png;*.jpg;*.jpeg;*.bmp;*.gif;*.tif")]
     )
     
     if caminho_imagem:
@@ -299,5 +303,45 @@ entry_valor_gaussiana.pack(pady=20)
 entry_valor_gaussiana.place(x=1200, y=450)
 entry_valor_gaussiana.insert(0, "0.1")
 funcoes.configurar_entry_gaussiana(entry_valor_gaussiana)
+
+# botão detecçao de borda primeira ordem Prewitt
+btn_prewitt = Button(Janela, text="Prewitt", command=funcoes.aplicar_filtro_prewitt, width=15, height=2)
+btn_prewitt.pack(pady=10)
+btn_prewitt.place(x=1330, y=50)
+
+# botão detecçao de borda primeira ordem Sobel
+btn_sobel = Button(Janela, text="Sobel", command=funcoes.aplicar_filtro_sobel, width=15, height=2)
+btn_sobel.pack(pady=10)
+btn_sobel.place(x=1330, y=100)
+
+# botão detecçao de borda segunda ordem Lapciano
+btn_Lapciano = Button(Janela, text="Lapciano", command=funcoes.aplicar_filtro_laplaciano, width=15, height=2)
+btn_Lapciano.pack(pady=10)
+btn_Lapciano.place(x=1330, y=150)
+
+# botão operação morfológica dilatação
+btn_Dilatacao = Button(Janela, text="Dilatação", command=funcoes.aplicar_dilatacao, width=15, height=2)
+btn_Dilatacao.pack(pady=10)
+btn_Dilatacao.place(x=1330, y=300)
+
+# botão operação morfológica erosão
+btn_Erosao = Button(Janela, text="Erosão", command=funcoes.aplicar_erosao, width=15, height=2)
+btn_Erosao.pack(pady=10)
+btn_Erosao.place(x=1330, y=350)
+
+# botão operação morfológica Abertura
+btn_Abertura = Button(Janela, text="Abertura", command=funcoes.aplicar_abertura, width=15, height=2)
+btn_Abertura.pack(pady=10)
+btn_Abertura.place(x=1330, y=400)
+
+# botão operação morfológica Fechamento
+btn_Fechamento = Button(Janela, text="Fechamento", command=funcoes.aplicar_fechamento, width=15, height=2)
+btn_Fechamento.pack(pady=10)
+btn_Fechamento.place(x=1330, y=450)
+
+# botão operação morfológica erosão
+btn_Contorno = Button(Janela, text="Contorno", command=funcoes.aplicar_contorno, width=15, height=2)
+btn_Contorno.pack(pady=10)
+btn_Contorno.place(x=1330, y=500)
 
 Janela.mainloop()
