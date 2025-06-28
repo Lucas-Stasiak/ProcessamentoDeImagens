@@ -482,10 +482,10 @@ def blending_imagem(C = 0):
         imgA = imgA.astype(np.float32)
         imgB = imgB.astype(np.float32)
 
-        # Percorrer pixel por pixel para calcular o blending
+        # Calcula o blending
         for y in range(altura):
             for x in range(largura):
-                for c in range(canais):  # Para todos os canais (RGB)
+                for c in range(canais):  
                     img_result[y, x, c] = (C * imgA[y, x, c]) + ((1 - C) * imgB[y, x, c])
 
         # Garantir que os valores fiquem no intervalo válido (0-255) e converter para uint8
