@@ -268,7 +268,7 @@ def multiplicacao_imagem():
             imgA = imgA.astype(np.int16)
 
             if int(entry_valor_multiplicacao.get()) >= 0 and int(entry_valor_multiplicacao.get()) <= 255:
-            # Realizar a subtração pixel por pixel garantindo que os valores não sejam menores que 0
+            
                 for y in range(altura):
                  for x in range(largura):
                     for c in range(canais):  # Para todos os canais (RGB)
